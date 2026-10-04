@@ -2,6 +2,18 @@
 
 给 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)（DSH）用的 **Codex 风格推理等级滑条**。
 
+**一档一色、越往右越"通电"**：填充从蓝渐变到紫罗兰，高档位亮起紫色星云与星尘粒子，
+连官方那一行的数值文字也跟着变色（`Off` 档保持官方灰）。
+
+![三档效果：Low / High / Max（深色主题）](preview/value-color-dark.png)
+
+| 收起态的模型席按钮也跟着变色 | 星尘分布（真产物算出来的） |
+|---|---|
+| ![模型席按钮](preview/seat-color.png) | ![星尘分布](preview/distribution.png) |
+
+浅色主题同样可读（对比度都算过：白底 4.23:1、深色底 4.02:1）：见 [`preview/value-color-light.png`](preview/value-color-light.png)。
+**不用安装也能先玩**：浏览器打开 [`preview/panel.html`](preview/panel.html)，可拖动、切浅深色、切 4/2/6 档模型。
+
 它不新增入口：**直接改造官方模型菜单里的「推理等级」那一行** ——
 那一行被加高上下内距、允许折行，滑条作为第二行铺满整行宽度；拖到最高档时整条轨道亮起紫色能量层。
 
@@ -18,7 +30,12 @@
 
 拖到最高档：轨道变为**紫色星云**（流向渐变 + 扫光 + 22 颗错峰星尘粒子），那一行同时描一圈紫边。
 
+**30 秒上手**：下载/克隆本仓库 → 双击 `install.cmd`（或按下面的「安装」一节）→
+**完全退出并重开** DSH Desktop。
+
 ## 安装
+
+> 不想 clone 的话,直接下载打包好的 zip:[**Releases → dsh-codex-effort-slider-1.0.0.zip**](https://github.com/Microqian2th/dsh-codex-effort-slider/releases/latest)。
 
 **只走 DSH Desktop 自己的插件面板**——命令行装不了 `desktop` profile：
 
