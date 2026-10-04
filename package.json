@@ -1,0 +1,50 @@
+{
+  "name": "dsh-codex-effort-slider",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Codex 风格的推理等级滑条：把 DSH 输入框工具行的推理等级档位换成一条可拖动的连续滑条 / A Codex-style reasoning-effort slider for DeepSeek Harness",
+  "license": "MIT",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "reasoning-effort",
+    "slider",
+    "ui"
+  ],
+  "type": "module",
+  "main": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/client.js",
+    "cordis.patch.yml",
+    "install-profile.ps1",
+    "install.cmd",
+    "LICENSE",
+    "test",
+    "preview",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node test/client.test.mjs",
+    "preview": "node preview/make-preview.mjs",
+    "pack": "powershell -NoProfile -ExecutionPolicy Bypass -File ./pack-dist.ps1"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true
+    }
+  }
+}
