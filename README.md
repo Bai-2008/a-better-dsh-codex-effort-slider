@@ -5,14 +5,24 @@
 **一档一色、越往右越"通电"**：填充从蓝渐变到紫罗兰，高档位亮起紫色星云与星尘粒子，
 连官方那一行的数值文字也跟着变色（`Off` 档保持官方灰）。
 
-![三档效果：Low / High / Max（深色主题）](preview/value-color-dark.png)
+## 装好之后长这样（真机截图）
 
-| 收起态的模型席按钮也跟着变色 | 星尘分布（真产物算出来的） |
-|---|---|
-| ![模型席按钮](preview/seat-color.png) | ![星尘分布](preview/distribution.png) |
+收起态：档位就在输入框里那枚模型席按钮上，**点开之前**也按档位着色。
 
-浅色主题同样可读（对比度都算过：白底 4.23:1、深色底 4.02:1）：见 [`preview/value-color-light.png`](preview/value-color-light.png)。
-**不用安装也能先玩**：浏览器打开 [`preview/panel.html`](preview/panel.html)，可拖动、切浅深色、切 4/2/6 档模型。
+![收起态：输入框里的档位显示](preview/screenshots/shot-01.png)
+
+点开模型菜单后（左列浅色主题 / 右列深色主题，四档从上到下）：
+
+| 档位 | 浅色主题 | 深色主题 |
+|---|---|---|
+| **Max** | ![浅色 Max](preview/screenshots/shot-02.png) | ![深色 Max](preview/screenshots/shot-06.png) |
+| **High** | ![浅色 High](preview/screenshots/shot-03.png) | ![深色 High](preview/screenshots/shot-07.png) |
+| **Low** | ![浅色 Low](preview/screenshots/shot-04.png) | ![浅色 Low](preview/screenshots/shot-08.png) |
+| **Off** | ![浅色 Off](preview/screenshots/shot-05.png) | ![深色 Off](preview/screenshots/shot-09.png) |
+
+对比度都算过（最高档的数值文字：白底 **4.23:1**、深色底 **4.02:1**）。
+**不用安装也能先玩**：浏览器打开 [`preview/panel.html`](preview/panel.html)，可拖动、切浅深色、切 4/2/6 档模型
+（另有脚本生成的实现示意图：[`preview/seat-color.png`](preview/seat-color.png)、[`preview/distribution.png`](preview/distribution.png)）。
 
 它不新增入口：**直接改造官方模型菜单里的「推理等级」那一行** ——
 那一行被加高上下内距、允许折行，滑条作为第二行铺满整行宽度；拖到最高档时整条轨道亮起紫色能量层。
