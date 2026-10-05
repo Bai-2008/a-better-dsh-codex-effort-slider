@@ -1,6 +1,7 @@
 # 依赖与产物（本插件零运行时依赖，正常不会有 node_modules）
 node_modules/
 dist/
+*.tgz
 
 # 编辑器 / 系统垃圾
 .DS_Store
