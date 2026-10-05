@@ -17,7 +17,7 @@
 |---|---|---|
 | **Max** | ![浅色 Max](preview/screenshots/shot-02.png) | ![深色 Max](preview/screenshots/shot-06.png) |
 | **High** | ![浅色 High](preview/screenshots/shot-03.png) | ![深色 High](preview/screenshots/shot-07.png) |
-| **Low** | ![浅色 Low](preview/screenshots/shot-04.png) | ![浅色 Low](preview/screenshots/shot-08.png) |
+| **Low** | ![浅色 Low](preview/screenshots/shot-04.png) | ![深色 Low](preview/screenshots/shot-08.png) |
 | **Off** | ![浅色 Off](preview/screenshots/shot-05.png) | ![深色 Off](preview/screenshots/shot-09.png) |
 
 对比度都算过（最高档的数值文字：白底 **4.23:1**、深色底 **4.02:1**）。
