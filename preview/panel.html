@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>better-dsh-codex-effort-slider — 观感预览（官方菜单那一行）</title>
+<style>
+/* ── 预览页自带的最小主题令牌（取自 DSH 官方 ui-theme 的真实取值）──
+   真插件在 DSH 里直接用官方令牌，这里只是为了在浏览器里还原同一套观感。 */
+body{--dsw-alias-bg-layer-1:#fff;--dsw-alias-bg-layer-2:#f5f5f5;--dsw-alias-bg-layer-3:#fff;--dsw-menu-surface-fill:#f8f9fa94;--dsw-alias-border-l1:rgb(15 17 21 / 8%);--dsw-alias-border-l2:#0000001a;--dsw-alias-label-primary:#0f1115;--dsw-alias-label-secondary:#65676b;--dsw-alias-label-tertiary:#81858c;--dsw-alias-label-caption:#a2a4a6;--dsw-alias-interactive-bg-hover:#2631480f;--dsw-alias-state-business-primary:#4d93f8;--dsw-alias-state-error-primary:#e5484d;--dsw-alias-menu-icon:#979da6;--dsw-radius-md:12px;--dsw-radius-lg:16px;--dsw-menu-backdrop-filter:blur(20px);--dsw-elevation-prominent:0 12px 32px rgb(0 0 0 / 18%);--dsw-focus-ring-width:2px;--dsw-focus-ring-color:#4d93f8;color-scheme:light}
+body[data-ds-dark-theme]{--dsw-alias-bg-layer-1:#212123;--dsw-alias-bg-layer-2:#17171a;--dsw-alias-bg-layer-3:#292929;--dsw-menu-surface-fill:#43454a73;--dsw-alias-border-l1:rgb(255 255 255 / 6%);--dsw-alias-border-l2:#ffffff1f;--dsw-alias-label-primary:#ebeef2;--dsw-alias-label-secondary:#cfd3d6;--dsw-alias-label-tertiary:#adb2b8;--dsw-alias-label-caption:#979da6;--dsw-alias-interactive-bg-hover:#ffffff14;--dsw-alias-state-business-primary:#7aaaff;--dsw-alias-state-error-primary:#ff6b6b;--dsw-elevation-prominent:0 12px 32px rgb(0 0 0 / 45%);color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;gap:18px;padding:32px;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--dsw-alias-bg-layer-2);color:var(--dsw-alias-label-primary)}
+.stage{width:560px;max-width:100%}
+.note{font-size:12px;line-height:1.7;color:var(--dsw-alias-label-tertiary);margin-bottom:14px}
+.note b{color:var(--dsw-alias-label-secondary)}
+/* 复刻官方模型菜单外壳（.menu / .cell 的真实取值：flex 行、34px 高、padding 0 8px、gap 6px） */
+.mock-menu{z-index:1100;width:max-content;min-width:280px;max-width:420px;border-radius:var(--dsw-radius-lg);background:var(--dsw-menu-surface-fill);backdrop-filter:var(--dsw-menu-backdrop-filter);box-shadow:var(--dsw-elevation-prominent);border:1px solid var(--dsw-alias-border-l2);display:flex;flex-direction:column;padding:4px}
+.mock-cell{box-sizing:border-box;border-radius:var(--dsw-radius-md);width:auto;min-width:100%;height:34px;color:var(--dsw-alias-label-primary);cursor:pointer;text-align:left;background:0 0;border:none;outline:none;align-items:center;gap:6px;padding:0 8px;font-size:13px;line-height:20px;display:flex;font-family:inherit}
+.mock-cell:hover{background:var(--dsw-alias-interactive-bg-hover)}
+.mock-cellLabel{white-space:nowrap;flex:none}
+.mock-cellValue{text-overflow:ellipsis;white-space:nowrap;text-align:right;min-width:0;color:var(--dsw-alias-label-tertiary);flex:auto;overflow:hidden}
+.mock-chev{width:12px;height:12px;color:var(--dsw-alias-menu-icon);flex:none}
+.mock-composer{margin-top:18px;padding:10px 12px;border:1px solid var(--dsw-alias-border-l2);border-radius:var(--dsw-radius-lg);background:var(--dsw-alias-bg-layer-3);color:var(--dsw-alias-label-tertiary);font-size:13px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+/* 复刻官方**收起态**模型席按钮（triggerLabel / triggerEffort 两个 span） */
+.mock-trigger{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 8px;border:0;border-radius:var(--dsw-radius-sm);background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-primary);font:inherit;font-size:13px;cursor:pointer}
+.mock-triggerLabel{font-weight:600}
+.mock-triggerEffort{color:var(--dsw-alias-label-caption);font-weight:500}
+.mock-trigger .mock-chev{width:14px;height:14px}
+.mock-send{width:26px;height:26px;border-radius:50%;background:var(--dsw-alias-state-business-primary);opacity:.85;flex:none}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.controls button{font:inherit;font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid var(--dsw-alias-border-l2);background:transparent;color:var(--dsw-alias-label-secondary);cursor:pointer}
+.controls button:hover{background:var(--dsw-alias-interactive-bg-hover)}
+/* ── 以下是**从 lib/client.js 抽取的真 CSS** ── */
+.ces-inline{--ces-accent:var(--dsw-alias-state-business-primary,var(--dsw-static-blue-450,#4d93f8));--ces-slide:.16s cubic-bezier(.2,.9,.3,1);box-sizing:border-box;flex-basis:100%;width:100%;min-width:0}
+.ces-inline[data-slide='slow']{--ces-slide:.34s ease-in-out}
+.ces-track{position:relative;box-sizing:border-box;height:20px;margin-top:2px;border-radius:999px;corner-shape:round;background:var(--dsw-alias-border-l1,rgba(15,17,21,.08));cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none}
+.ces-fill{position:absolute;top:0;bottom:0;left:0;border-radius:10px 0 0 10px;corner-shape:round;transition:width var(--ces-slide);pointer-events:none}
+.ces-tick{position:absolute;top:50%;width:3px;height:3px;margin:-1.5px 0 0 -1.5px;border-radius:50%;corner-shape:round;background:color-mix(in srgb,var(--dsw-alias-label-primary,#0f1115) 26%,transparent);pointer-events:none;transition:opacity .18s ease}
+.ces-tick[data-on='1']{background:rgba(255,255,255,.5)}
+.ces-inline[data-max='1'] .ces-tick[data-current='0']{opacity:0}
+.ces-knob{position:absolute;top:50%;width:28px;height:28px;margin:-14px 0 0 -14px;border-radius:50%;corner-shape:round;transition:left var(--ces-slide);background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.16),0 0 0 1px rgba(0,0,0,.05);pointer-events:none}
+.ces-error{margin-top:6px;font-size:11px;line-height:16px;color:var(--dsw-alias-state-error-primary,#e5484d)}
+.ces-inline[data-energy='1'] .ces-track{box-shadow:0 0 calc(var(--ces-energy,0) * 16px) rgba(168,85,247,.5)}
+.ces-inline[data-energy='0'] .ces-star,.ces-inline[data-energy='0'] .ces-energy__sweep{animation-play-state:paused}
+.ces-energy{position:absolute;top:0;bottom:0;left:0;border-radius:10px 0 0 10px;corner-shape:round;overflow:hidden;pointer-events:none;opacity:var(--ces-energy,0);transition:opacity .2s ease,width var(--ces-slide);background:linear-gradient(90deg,#3b1178 0%,#6d28d9 30%,#9333ea 62%,#c084fc 100%)}
+.ces-stars{position:absolute;top:0;bottom:0;left:0;border-radius:10px 0 0 10px;corner-shape:round;overflow:hidden;pointer-events:none;transition:opacity .2s ease,width var(--ces-slide)}
+.ces-star{position:absolute;left:0;right:0;height:3px;margin-top:-1.5px;pointer-events:none;animation-name:ces-star-sweep;animation-timing-function:linear;animation-iteration-count:infinite}
+.ces-star__dot{position:absolute;left:100%;top:0;width:3px;height:3px;margin-left:-1.5px;border-radius:50%;background:#fff;box-shadow:0 0 4px rgba(255,255,255,.85);opacity:var(--ces-b,1);transform:scale(var(--ces-b,1))}
+@keyframes ces-star-sweep{0%{transform:translate3d(0,0,0);opacity:0}6%{opacity:1}94%{opacity:1}100%{transform:translate3d(-100%,0,0);opacity:0}}
+.ces-energy__sweep{position:absolute;inset:0;background:linear-gradient(100deg,transparent 18%,rgba(255,255,255,.30) 50%,transparent 82%);transform:translateX(100%);animation:ces-sweep 2.4s linear infinite}
+@keyframes ces-sweep{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+body[data-ds-dark-theme] .ces-star__dot{background:#f5f3ff;box-shadow:0 0 5px rgba(216,180,254,.95)}
+@media (prefers-reduced-motion: reduce){.ces-energy{transition:none}.ces-tick{transition:none}.ces-knob{transition:none}.ces-fill{transition:none}.ces-stars{transition:none}.ces-energy__sweep{display:none}}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="note">
+    这是 <b>观感预览</b>（静态复刻）：CSS 与拖动数学都是从 <code>lib/client.js</code> 抽取的真代码，
+    注入手法也与插件一致（同样 4 个内联样式 + append 一个容器）。<b>拖到最右</b>看最高档能量层。
+    注意输入框那一行<b>不再有任何东西</b>——控制项只在官方菜单的「推理等级」那一行里。
+  </div>
+
+  <div class="mock-menu" role="menu" aria-label="模型与推理等级">
+    <button class="mock-cell" role="menuitem" type="button" id="modelRow">
+      <span class="mock-cellLabel">模型</span>
+      <span class="mock-cellValue">DeepSeek-V41-Flash</span>
+      <svg class="mock-chev" viewBox="0 0 17 17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 4 11 8.5 6.5 13"></path></svg>
+    </button>
+    <button class="mock-cell" role="menuitem" type="button" id="effortRow">
+      <span class="mock-cellLabel">推理等级</span>
+      <span class="mock-cellValue" id="effortValue">High</span>
+      <svg class="mock-chev" viewBox="0 0 17 17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 4 11 8.5 6.5 13"></path></svg>
+    </button>
+  </div>
+
+  <div class="mock-composer">
+    <button class="mock-trigger" type="button" id="seat">
+      <span class="mock-triggerLabel">DeepSeek-V41-Flash</span>
+      <span class="mock-triggerEffort" id="seatEffort">High</span>
+      <svg class="mock-chev" viewBox="0 0 17 17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 4 11 8.5 6.5 13" transform="rotate(90 8.5 8.5)"></path></svg>
+    </button>
+    <span class="mock-send"></span>
+  </div>
+
+  <div class="controls">
+    <button id="theme">切换浅色/深色</button>
+    <button id="levels4">4 档（Off/Low/High/Max）</button>
+    <button id="levels2">2 档（High/Max）</button>
+    <button id="levels6">6 档（含 minimal/xhigh）</button>
+  </div>
+</div>
+
+<script>
+/* ── 以下函数体从 lib/client.js 抽取（数学与真插件逐字一致）── */
+function clamp01(value) {
+      if (!(value > 0)) return 0; // 同时挡住 NaN
+      return value > 1 ? 1 : value;
+    }
+
+function pctFromIndex(index, count) {
+      if (count <= 1) return 0;
+      var safe = Math.max(0, Math.min(count - 1, index));
+      return safe / (count - 1);
+    }
+
+function mixColor(from, to, t) {
+      var k = clamp01(t);
+      return [
+        Math.round(from[0] + (to[0] - from[0]) * k),
+        Math.round(from[1] + (to[1] - from[1]) * k),
+        Math.round(from[2] + (to[2] - from[2]) * k),
+      ];
+    }
+
+function rgbOf(color) {
+      return "rgb(" + color[0] + "," + color[1] + "," + color[2] + ")";
+    }
+
+function fillColorFor(pct) {
+      var t = clamp01(pct);
+      if (t <= ENERGY_START) return rgbOf(COLOR_BLUE);
+      if (t <= ENERGY_END) return rgbOf(mixColor(COLOR_BLUE, COLOR_VIOLET, (t - ENERGY_START) / (ENERGY_END - ENERGY_START)));
+      return rgbOf(mixColor(COLOR_VIOLET, COLOR_DEEP, (t - ENERGY_END) / (1 - ENERGY_END)));
+    }
+
+function fillBackgroundFor(pct) {
+      return "linear-gradient(90deg, " + rgbOf(COLOR_BLUE) + ", " + fillColorFor(pct) + ")";
+    }
+
+function energyFor(pct) {
+      return clamp01((clamp01(pct) - ENERGY_START) / (1 - ENERGY_START));
+    }
+
+function speedFor(pct) {
+      return Math.min(2, Math.max(0.35, 3 * clamp01(pct) - 1));
+    }
+
+function particleCountFor(pct) {
+      return Math.round(energyFor(pct) * PARTICLES.length);
+    }
+
+function starCountFor(pct) {
+      return particleCountFor(pct);
+    }
+
+function starLayerOpacityFor(pct) {
+      return 0.6 + 0.4 * energyFor(pct);
+    }
+
+function starBrightnessFor(index) {
+      return STARFIELD_MIN + (1 - STARFIELD_MIN) * starHash01(index, 61);
+    }
+
+function starDurationFor(index, speedFactor) {
+      var speed = Math.min(MAX_SPEED_FACTOR, Math.max(0.35, typeof speedFactor === "number" ? speedFactor : MAX_SPEED_FACTOR));
+      var spread = 1 - STARFIELD_DURATION_SPREAD + 2 * STARFIELD_DURATION_SPREAD * starHash01(index, 29);
+      return STARFIELD_DURATION_MEAN * MAX_SPEED_FACTOR / speed * spread;
+    }
+
+function starDelayFor(index, duration) {
+      var particle = PARTICLES[index];
+      var phase = particle && typeof particle.phase === "number" ? particle.phase : 0;
+      var jitter = starHash01(index, 53) * 0.03; // 一点点抖动，避免看起来像整齐的队列
+      return -((phase + jitter) % 1) * duration;
+    }
+
+function starHash01(index, salt) {
+      var value = (index + 1) * salt * 2654435761 % 4294967296;
+      return ((value >>> 8) % 1000) / 1000;
+    }
+
+function knobOffsetOf(pct) {
+      var t = Math.round(clamp01(pct) * 10000) / 10000;
+      return "calc(" + TRACK_RADIUS + "px + " + t + " * (100% - " + TRACK_RADIUS * 2 + "px))";
+    }
+
+function buildParticles() {
+      var count = 22;
+      var out = [];
+      var i;
+      for (i = 0; i < count; i += 1) {
+        out.push({ y: 0, phase: (i + 1) * GOLDEN_RATIO % 1 });
+      }
+      // 相位排名：黄金比序列里排名相邻 = 在轨道上位置相邻
+      var byPhase = [];
+      for (i = 0; i < count; i += 1) byPhase.push(i);
+      byPhase.sort(function (a, b) {
+        return out[a].phase - out[b].phase;
+      });
+      // 高度槽：找一个满足"相位相邻至少差 MIN_HEIGHT_SLOTS 槽"的确定性随机排列
+      var slots = null;
+      for (var salt = 71; salt < 4000 && slots === null; salt += 1) {
+        var candidate = [];
+        for (i = 0; i < count; i += 1) candidate.push(i);
+        candidate.sort(function (a, b) {
+          var ha = starHash01(a, salt);
+          var hb = starHash01(b, salt);
+          return ha === hb ? a - b : ha - hb;
+        });
+        var ok = true;
+        for (var k = 1; k < count && ok; k += 1) {
+          if (Math.abs(candidate[k] - candidate[k - 1]) < MIN_HEIGHT_SLOTS) ok = false;
+        }
+        if (ok) slots = candidate;
+      }
+      if (slots === null) {
+        // 兜底：步长 5 与 22 互质 → 一定是排列，且相邻槽恒差 5（≥ MIN_HEIGHT_SLOTS）
+        slots = [];
+        for (i = 0; i < count; i += 1) slots.push(i * 5 % count);
+      }
+      for (var rank = 0; rank < count; rank += 1) {
+        out[byPhase[rank]].y = 8 + (slots[rank] / (count - 1)) * 84;
+      }
+      return out;
+    }
+
+function isOffLevel(level) {
+      if (!level) return false;
+      var candidates = [level.id, level.name];
+      for (var i = 0; i < candidates.length; i += 1) {
+        if (typeof candidates[i] !== "string") continue;
+        var flat = candidates[i].replace(/\s+/g, "").toLowerCase();
+        if (flat === "off" || flat === "none" || flat === "关闭" || flat === "无") return true;
+      }
+      return false;
+    }
+
+function valueColorFor(pct, level) {
+      if (isOffLevel(level)) return "";
+      return rgbOf(mixColor(COLOR_BLUE, COLOR_TEXT_VIOLET, energyFor(pct)));
+    }
+
+var ROW_PADDING_BLOCK = "10px";
+var TRACK_HEIGHT = 20;
+var KNOB_SIZE = 28;
+var KNOB_RADIUS = 14;
+var TRACK_RADIUS = 10;
+var DETENT_THIRD = 0.3333333333333333;
+var SLOW_DRAG_ENTER_MS = 320;
+var SLOW_DRAG_EXIT_MS = 200;
+var BASE_SPEEDUP = 4;
+var STARFIELD_DURATION_MEAN = 1.5;
+var STARFIELD_DURATION_SPREAD = 0.08;
+var STARFIELD_MIN = 0.5;
+var GOLDEN_RATIO = 0.6180339887498949;
+var MAX_SPEED_FACTOR = 2;
+var MIN_HEIGHT_SLOTS = 3;
+var ENERGY_START = 0.3333333333333333;
+var ENERGY_END = 0.6666666666666666;
+var COLOR_BLUE = [77,147,248];
+var COLOR_VIOLET = [147,51,234];
+var COLOR_DEEP = [76,29,149];
+var COLOR_TEXT_VIOLET = [139,92,246];
+/* 星尘参数表：抽出来的 starDelayFor 会读 PARTICLES，这里必须真的建出来
+   （少了它预览页会 ReferenceError 整个脚本挂掉 —— 生成期有守卫盯着这件事）。 */
+var PARTICLES = buildParticles();
+var LEVELS = {
+  "4": [{id:"off",name:"Off"},{id:"low",name:"Low"},{id:"high",name:"High"},{id:"max",name:"Max"}],
+  "2": [{id:"high",name:"High"},{id:"max",name:"Max"}],
+  "6": [{id:"off",name:"Off"},{id:"minimal",name:"Minimal"},{id:"low",name:"Low"},{id:"medium",name:"Medium"},{id:"xhigh",name:"XHigh"},{id:"max",name:"Max"}]
+};
+var current = "4";
+var index = 2;
+var dragging = false;
+
+/* ── 复刻插件的 DOM 桥：同样 4 个内联样式 + append 一个容器 ── */
+var row = document.getElementById("effortRow");
+row.style.height = "auto";
+row.style.flexWrap = "wrap";
+row.style.paddingTop = ROW_PADDING_BLOCK;
+row.style.paddingBottom = ROW_PADDING_BLOCK;
+
+var host = document.createElement("div");
+host.className = "ces-inline";
+host.dataset.slide = "fast"; // 真插件每次渲染都会写 data-slide，这里保持一致
+host.setAttribute("data-energy", "0");
+row.appendChild(host);
+
+var track = document.createElement("div");
+track.className = "ces-track";
+track.setAttribute("role", "slider");
+// 真插件刻意不做键盘操作（不 tabindex、不挂 keydown）；预览页保持一致。
+var fill = document.createElement("div");
+fill.className = "ces-fill";
+var energy = document.createElement("div");
+energy.className = "ces-energy";
+var sweep = document.createElement("div");
+sweep.className = "ces-energy__sweep";
+energy.appendChild(sweep);
+var ticks = document.createElement("span");
+var knob = document.createElement("div");
+knob.className = "ces-knob";
+track.appendChild(fill);
+track.appendChild(energy);
+track.appendChild(ticks);
+track.appendChild(knob);
+host.appendChild(track);
+var valueSpan = document.getElementById("effortValue");
+var seatEffortSpan = document.getElementById("seatEffort");
+
+/* 星空（所有出现粒子的档位共用）：外层是整轨宽度的轨道（自己在横穿），内层圆点带亮度。 */
+var starDefs = buildParticles().map(function (p, i) {
+  return { top: p.y, brightness: starBrightnessFor(i) };
+});
+/* 星星单独一层（与真组件同结构）：不跟星云淡入，否则 high 档会被星云的 0.5 透明度压暗。 */
+var starHost = document.createElement("span");
+starHost.className = "ces-stars";
+starHost.setAttribute("data-ces-part", "stars");
+starHost.style.position = "absolute";
+starHost.style.inset = "0 auto 0 0";
+starHost.style.borderRadius = "999px";
+starHost.style.overflow = "hidden";
+starHost.style.pointerEvents = "none";
+track.appendChild(starHost);
+var starEls = starDefs.map(function (def, i) {
+  var star = document.createElement("span");
+  star.className = "ces-star";
+  star.style.top = def.top + "%";
+  var dot = document.createElement("span");
+  dot.className = "ces-star__dot";
+  dot.style.setProperty("--ces-b", def.brightness.toFixed(3));
+  star.appendChild(dot);
+  star.style.display = "none";
+  starHost.appendChild(star);
+  return star;
+});
+
+/** 速度随位置变化（保留）：MAX 1.5s、high 3s、左端 ~8.6s；各星只差 ±8%。
+ *  时长/相位与生产一致：**直接内联**，不走 CSS 变量（变量会让负相位在真宿主里失效）。 */
+function applyParticles(pct) {
+  var count = particleCountFor(pct);
+  var speedFactor = speedFor(pct);
+  starHost.style.width = knobOffsetOf(pct);
+  starHost.style.opacity = String(starLayerOpacityFor(pct));
+  starEls.forEach(function (el, i) {
+    var duration = starDurationFor(i, speedFactor);
+    el.style.display = i < count ? "" : "none";
+    el.style.animationDuration = duration.toFixed(3) + "s";
+    el.style.animationDelay = starDelayFor(i, duration).toFixed(3) + "s";
+  });
+  starHost.setAttribute("data-count", String(count));
+}
+
+/* 系统开了「减少动态效果」时真插件用 title 说明原因；预览页照做 */
+var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+host.setAttribute("data-motion", reduced ? "reduced" : "full");
+if (reduced) track.title = "推理等级（系统「减少动态效果」已开启：粒子已放缓）";
+
+function renderTicks() {
+  var levels = LEVELS[current];
+  ticks.innerHTML = "";
+  levels.forEach(function (level, i) {
+    var tick = document.createElement("span");
+    tick.className = "ces-tick";
+    tick.style.left = knobOffsetOf(pctFromIndex(i, levels.length));
+    tick.dataset.on = i <= index ? "1" : "0";
+    tick.dataset.current = i === index ? "1" : "0";
+    ticks.appendChild(tick);
+  });
+}
+
+function render(pct) {
+  var levels = LEVELS[current];
+  var shownPct = typeof pct === "number" ? pct : pctFromIndex(index, levels.length);
+  var strength = energyFor(shownPct);
+  var shown = levels[index];
+  var offset = knobOffsetOf(shownPct);
+  fill.style.width = offset;
+  fill.style.background = fillBackgroundFor(shownPct);
+  energy.style.width = offset; // 能量条只覆盖已填充段（档位右边没到的地方不显示）
+  knob.style.left = offset;
+  host.style.setProperty("--ces-energy", String(strength));
+  host.dataset.energy = strength > 0 ? "1" : "0";
+  // Max 档（最高一档）：隐藏其他档位的定位点（与 lib/client.js 的 data-max 规则一致）
+  host.dataset.max = index >= levels.length - 1 ? "1" : "0";
+  row.style.boxShadow = strength > 0 ? "inset 0 0 0 1px rgba(168,85,247," + (0.16 + 0.34 * strength).toFixed(2) + ")" : "";
+  valueSpan.textContent = shown.name;
+  // 官方菜单里那一行的数值文字：跟着**显示中**的位置/档位着色（Off 档 = 空串 = 官方灰）
+  valueSpan.style.color = valueColorFor(shownPct, shown);
+  // 收起态的席按钮：显示的是**已生效**档位（预览里没有草稿，就是当前档），同样着色
+  seatEffortSpan.textContent = shown.name;
+  seatEffortSpan.style.color = valueColorFor(pctFromIndex(index, levels.length), shown);
+  track.setAttribute("aria-valuemax", String(levels.length - 1));
+  track.setAttribute("aria-valuenow", String(index));
+  track.setAttribute("aria-valuetext", shown.name);
+  applyParticles(shownPct);
+  renderTicks();
+}
+
+function pctAt(clientX) {
+  var rect = track.getBoundingClientRect();
+  var usable = rect.width - TRACK_RADIUS * 2;
+  if (!(usable > 0)) return null;
+  return clamp01((clientX - rect.left - TRACK_RADIUS) / usable);
+}
+
+/*
+ * 拖动手感与真插件一致：旋钮**不跟手**，指针越过"每档 +1/3 档距"的判定线才换档，
+ * 位置变化交给 CSS 过渡滑过去（真插件里由 React 重渲染 + transition 完成，这里同构）。
+ */
+var press = { u: 0, index: 0, conflict: false, active: false };
+
+function unitAt(clientX) {
+  var pct = pctAt(clientX);
+  if (pct === null) return null;
+  return pct * (LEVELS[current].length - 1);
+}
+
+function mappingOf(u) {
+  var last = LEVELS[current].length - 1;
+  return Math.max(0, Math.min(last, Math.floor(u - DETENT_THIRD) + 1));
+}
+
+function resolveTarget(u) {
+  var mapped = mappingOf(u);
+  if (press.active) {
+    if (!press.conflict || mapped === press.index || Math.abs(u - press.u) >= DETENT_THIRD) press.active = false;
+    else return press.index;
+  }
+  return mapped;
+}
+
+var lastStepAt = 0;
+var slideSlow = false;
+
+/**
+ * 快慢两档动画（与 lib/client.js 同一套判据）：与上一次换档的间隔决定用哪一档，
+ * 两个阈值构成迟滞。只改 host 上的 data-slide，CSS 那边靠 --ces-slide 变量接管。
+ */
+function noteStepTiming() {
+  var now = Date.now();
+  var gap = now - lastStepAt;
+  lastStepAt = now;
+  if (slideSlow) slideSlow = gap >= SLOW_DRAG_EXIT_MS;
+  else slideSlow = gap > SLOW_DRAG_ENTER_MS;
+  host.dataset.slide = slideSlow ? "slow" : "fast";
+}
+
+function setIndex(next) {
+  var levels = LEVELS[current];
+  var clamped = Math.max(0, Math.min(levels.length - 1, next));
+  if (clamped === index) return;
+  index = clamped;
+  noteStepTiming();
+  render();
+}
+
+track.addEventListener("pointerdown", function (event) {
+  dragging = true;
+  try { track.setPointerCapture(event.pointerId); } catch (error) { /* 合成事件没有真指针 */ }
+  var u = unitAt(event.clientX);
+  if (u === null) return;
+  var nearest = Math.round(u);
+  lastStepAt = Date.now();   // 第一次换档的间隔从"按下"算起
+  press = { u: u, index: nearest, conflict: mappingOf(u) !== nearest, active: true };
+  setIndex(nearest);   // 按下 = 点哪去哪（取最近档）
+});
+track.addEventListener("pointermove", function (event) {
+  if (!dragging) return;
+  var u = unitAt(event.clientX);
+  if (u === null) return;
+  setIndex(resolveTarget(u));
+});
+function end() { if (!dragging) return; dragging = false; press.active = false; render(); }
+track.addEventListener("pointerup", end);
+track.addEventListener("pointercancel", end);
+
+function setLevels(key) {
+  current = key;
+  index = Math.min(index, LEVELS[key].length - 1);
+  render();
+}
+
+/* 支持 ?level=off|low|high|max（无头截图和自查都用它定位到具体档位） */
+(function applyQuery() {
+  var wanted = (new URLSearchParams(location.search).get("level") || "").toLowerCase();
+  if (wanted === "") return;
+  var levels = LEVELS[current];
+  for (var i = 0; i < levels.length; i += 1) {
+    if (levels[i].id === wanted) { index = i; return; }
+  }
+})();
+
+document.getElementById("theme").addEventListener("click", function () {
+  if (document.body.hasAttribute("data-ds-dark-theme")) document.body.removeAttribute("data-ds-dark-theme");
+  else document.body.setAttribute("data-ds-dark-theme", "");
+});
+document.getElementById("levels4").addEventListener("click", function () { setLevels("4"); });
+document.getElementById("levels2").addEventListener("click", function () { setLevels("2"); });
+document.getElementById("levels6").addEventListener("click", function () { setLevels("6"); });
+
+render();
+</script>
+</body>
+</html>
