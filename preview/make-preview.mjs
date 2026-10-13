@@ -182,6 +182,15 @@ body[data-ds-dark-theme]{--dsw-alias-bg-layer-1:#212123;--dsw-alias-bg-layer-2:#
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;display:grid;place-items:center;gap:18px;padding:32px;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--dsw-alias-bg-layer-2);color:var(--dsw-alias-label-primary)}
 .stage{width:560px;max-width:100%}
+/* 截图态（?shot=1）：只留「模型 + 推理等级 + 滑条」两行 —— 两张预览图
+   preview/value-color-{light,dark}.png 就是这么截的（与旧图同一种取景）。
+   说明文字、控件、模型列表、输入框都去掉，页面不留外边距，方便按内容裁切。 */
+body[data-shot]{padding:0}
+body[data-shot] .note,
+body[data-shot] .controls,
+body[data-shot] .mock-composer,
+body[data-shot] .mock-option{display:none}
+body[data-shot] .stage{width:auto}
 .note{font-size:12px;line-height:1.7;color:var(--dsw-alias-label-tertiary);margin-bottom:14px}
 .note b{color:var(--dsw-alias-label-secondary)}
 /* 复刻官方模型菜单外壳（.menu / .cell 的真实取值：flex 行、34px 高、padding 0 8px、gap 6px） */
@@ -545,6 +554,16 @@ function setLevels(key) {
       if (levels[i].id === wanted) { current = keys[k]; index = i; return; }
     }
   }
+})();
+
+/* 截图态与主题：?shot=1 走「只有两行」的取景，?dark=1（或 ?theme=dark）直接进深色。
+   两张预览图就是 shot × {light,dark} × {off,low,high,max} 各截一张再拼起来的，
+   所以这两个开关不是"给用户看的"，而是**这两张图的生成方式**（可复现，不用手工点按钮）。 */
+(function applyQueryShot() {
+  var params = new URLSearchParams(location.search);
+  if (params.get("shot") === "1") document.body.setAttribute("data-shot", "");
+  var theme = (params.get("dark") || params.get("theme") || "").toLowerCase();
+  if (theme === "1" || theme === "true" || theme === "dark") document.body.setAttribute("data-ds-dark-theme", "");
 })();
 
 document.getElementById("theme").addEventListener("click", function () {

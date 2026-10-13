@@ -3468,6 +3468,23 @@ section("44. 包清单不能带 BOM（宿主直接 JSON.parse 它 —— 带 BOM
     SOURCE.indexOf("package.json") >= 0 || readFileSync(fileURLToPath(new URL("../lib/index.js", import.meta.url)), "utf8").indexOf("package.json") < 0,
     "[44] 宿主侧自检不依赖 package.json（真出 BOM 时它照样能报'产物就绪'）",
   );
+
+  /*
+   * **反过来的那一条**：两个 `.ps1` **必须带 BOM**。
+   *
+   * `pack-dist.ps1` 头部自己就写着这个要求：Windows PowerShell 5.1 读无 BOM 的 `.ps1`
+   * 会按系统代码页解码，中文注释/提示直接变乱码、甚至语法错误。
+   * 这两条断言是给一次真实误伤打的补丁：为了修 `package.json` 的 BOM 事故，
+   * 当时"顺手全仓库去 BOM"，把这俩 `.ps1` 的 BOM 也剥了 —— 规则是**分文件类型**的，
+   * 不是"BOM 一律坏"（JSON/JS 不能带，PowerShell 脚本要带）。
+   */
+  for (const rel of ["../pack-dist.ps1", "../install-profile.ps1"]) {
+    eq(hasBom(readBytes(rel)), true, `[44] ${rel.replace("../", "")} **带** BOM（PS 5.1 读无 BOM 的中文脚本会乱码/报错）`);
+  }
+  ok(
+    readFileSync(fileURLToPath(new URL("../pack-dist.ps1", import.meta.url)), "utf8").indexOf("必须存为 **UTF-8 带 BOM**") >= 0,
+    "[44] 而且脚本头部把这条要求写在注释里（谁想再剥一次 BOM 会先读到它）",
+  );
 }
 
 /* ══════════════════════════════════════════════════════════════════════ */

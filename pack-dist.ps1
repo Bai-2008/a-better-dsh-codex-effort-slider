@@ -1,4 +1,4 @@
-<#
+﻿<#
   打发布包：dist/better-dsh-codex-effort-slider-<version>.zip
 
   结构与上游发布包保持一致：**zip 里是一层同名目录**，解开后那一层目录即可作为

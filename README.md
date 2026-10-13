@@ -185,6 +185,10 @@ dsh plugin --profile desktop add link:"F:\Work Space\DeepSeek Harness\better-dsh
 用浏览器打开即可拖动、切浅深色、切 4/2/6 档模型（页面里连官方菜单外壳都复刻了，
 CSS 与拖动数学都是从真产物抽出来的）。
 
+预览页还有几个**给无头截图用**的参数（README 开头那两张 `preview/value-color-*.png` 就是这么生成的，
+可复现、不用手工点按钮）：`?level=<档位 id>` 直接定位到某一档、`?dark=1` 进深色、
+`?shot=1` 只留「模型 + 推理等级 + 滑条」两行。例：`preview/panel.html?shot=1&level=max`。
+
 ## 分享给别人
 
 ### 打包
