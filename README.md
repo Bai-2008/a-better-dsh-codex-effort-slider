@@ -11,10 +11,11 @@
 ![license](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 ![dsh](https://img.shields.io/badge/DSH-0.2.0--rc.2-5b6ef5?style=flat-square)
 
-![四档效果：Off / Low / High / Max（深色主题）](preview/value-color-dark.png)
+![三档效果：Low / High / Max（深色主题，真机截图）](preview/value-color-dark.png)
 
 浅色主题同样可读（档位文字对比度算过：白底 4.23:1、深色底 4.02:1）：
 [`preview/value-color-light.png`](preview/value-color-light.png)。
+两张图都是**真机截图**（在 DSH Desktop 里逐个档位截下来再拼接），不是渲染稿。
 
 ---
 
