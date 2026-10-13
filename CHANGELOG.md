@@ -3,6 +3,19 @@
 本分支基于上游 [dsh-codex-effort-slider](https://github.com/Microqian2th/dsh-codex-effort-slider) `1.0.0`。
 下面是相对上游的**全部**改动（按主题归并，不是提交流水）。
 
+> 文档分工：入门/安装/使用/FAQ 在 [README.md](README.md)；**实现细节**在 [ARCHITECTURE.md](ARCHITECTURE.md)；
+> 本文是逐版流水；主题式改动清单与取舍在 [MODIFICATIONS.md](MODIFICATIONS.md)。
+
+---
+
+## 文档整理（随 1.3.10 一起，无代码改动）
+
+`README.md` 从 492 行的"设计说明书"重写为**常规开源结构**（特性 / 安装 / 使用 / 配置 / 兼容性 /
+常见问题 / 已知限制 / 开发 / 打包与发布 / 项目结构 / 文档 / 致谢与许可，带目录与徽章），
+原来那些实现细节（两套 UI、接管时序、DOM 锚点表、数据路径、色彩与粒子的全部数学、
+旋钮几何、稳健性清单、测试台策略）**一字未丢**地搬进新的 **[ARCHITECTURE.md](ARCHITECTURE.md)**。
+本轮顺带把两张预览图换成用当前产物重新生成的版本（`?shot=1&level=…&dark=1` 无头截图 → 裁切拼接）。
+
 ---
 
 ## 1.3.10 — 再透一档；阴影不再被"一个框"裁掉
