@@ -278,7 +278,8 @@ cordis.patch.yml        bundle 补丁层（声明本插件在组合里的一行�
 | 文档 | 内容 |
 |---|---|
 | [ARCHITECTURE.md](ARCHITECTURE.md) | 怎么实现的：两套 UI、接管时序、DOM 锚点、数据路径、色彩/粒子数学、稳健性清单、测试台 |
-| [CHANGELOG.md](CHANGELOG.md) | 逐版改动；真机事故都按"现场 → 根因 → 修法 → 断言"记着 |
+| [INCIDENTS.md](INCIDENTS.md) | **真机事故复盘**（九条）：现场 → 根因 → 修法 → 断言。装不上/界面不对时先翻这份 |
+| [CHANGELOG.md](CHANGELOG.md) | 逐版改动流水 |
 | [MODIFICATIONS.md](MODIFICATIONS.md) | 相对上游的主题式改动清单、移植对照与取舍 |
 
 ---
