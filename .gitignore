@@ -1,0 +1,8 @@
+# 构建产物与本地文件（远端历史上从未跟踪过 dist/）
+dist/
+node_modules/
+
+# 系统/编辑器杂项
+.DS_Store
+Thumbs.db
+*.log

@@ -1,4 +1,4 @@
-﻿<#
+<#
   把本插件装进某个 DSH profile（默认 desktop）。
 
   为什么需要它：`desktop` 是 Electron 应用保留的 profile，命令行 `dsh plugin --profile desktop …`
